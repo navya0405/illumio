@@ -100,8 +100,9 @@ class FlowLogAnalyzer:
                     log_count += 1
                     try:
                         parts = line.split()
-                        if len(parts) < 8:
-                            logging.warning(f"""Invalid log line: {line}""")
+                        if len(parts) != 14:
+                            logging.warning(
+                                f"""Invalid log line length found in line: {line}""")
                             continue
                         successful_logs_count += 1
                         dstport = parts[6]
