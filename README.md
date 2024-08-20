@@ -11,7 +11,7 @@
 4. The tags can map to more than one port, protocol combinations.  for e.g. sv_P1 and sv_P2 in the sample above. 
 5. The matches should be case insensitive 
 
-### To run the code, Enter the command  python3 main.py
+## To run the code, enter the command `python3 main.py`
 
 ### Background
 1. A flow log record represents a network flow in your VPC.
