@@ -104,6 +104,13 @@ sv_P1,2
 email,3
 sv_P5,1
 
+Also tested with invalid log line with length not equal to 14:
+1. 2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 880 17 9 4500 1620140661 1620140721 ACCEPT OK 123
+2. 2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 880 17 9 4500 1620140661 1620140721 ACCEPT 
+The above testcases added this in logging and continued to process next log line.
+WARNING:root:Invalid log line length found in line: 2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 880 17 9 4500 1620140661 1620140721 ACCEPT OK 123
+
+WARNING:root:Invalid log line length found in line: 2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 880 17 9 4500 1620140661 1620140721 ACCEPT 
 
 The outputs files are,
 Tag Counts - tag_counts.csv 
