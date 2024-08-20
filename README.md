@@ -13,6 +13,50 @@
 
 ## To run the code, enter the command `python3 main.py`
 
+### Approach
+
+#### Let's consider the below log and breakdown what each field indicates:
+2 123456789012 eni-0a1b2c3d 10.0.1.201 198.51.100.2 443 49153 6 25 20000 1620140761 1620140821 ACCEPT OK 
+
+1. 2 - version
+2. 123456789012 - account id
+3. eni-0a1b2c3d - interface id
+4. 10.0.1.201 - srcaddr
+5. 198.51.100.2 - destaddr
+6. 443 - srcport
+7. 49153 - dstport
+8. 6 - protocol
+9. 25 - packets
+10. 20000 - bytes
+11. 1620140761 - start time (time when first packet was recieved) in unix
+12. 1620140821 - end time (time when last packet was recieved) in unix
+13. ACCEPT - action (Traffic was accepted)
+14. OK - logstatus (Data is logging normally to the chosen destinations.)
+
+
+#### The fields which we would be using for our analytics are 7.dstport, 8.protocol.
+
+1. To get the Count of matches for each tag,We use the above 2 fields from flow logs and use the lookup table to map both dstport and protocol as key (tuple) to get the tag and increment the tag count based on that.
+The protcol in flow logs has number code only, hence I have created a mapping of these protocol numbers below to map them to protocol given in look up table.
+
+{'6': 'tcp', '17': 'udp', '1': 'icmp'}
+
+The above protocol numbers were referred from -  https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+
+
+2. To get the Count of matches for each port/protocol combination , we just create and add the count of each port protocol without using lookup table.
+
+Assumption: Here count of port doesn't say if its srcport or dstport. I have taken dstport as lookup table uses dstport.
+
+Edge Cases:
+
+1. The dstport, protocol combination in flow logs may not be found in the look up table. In that case, we can use untagged as tag as mentioned in example. 
+
+The outputs files are,
+Tag Counts - tag_counts.csv 
+Port/Protocol Counts - port_protocol_counts.csv.
+
+
 ### Background
 1. A flow log record represents a network flow in your VPC.
 2. Each record is a string with fields separated by spaces. A record includes values for the different components of the IP flow, for example, the source, destination, and protocol.
@@ -97,49 +141,6 @@ Note: If a field is not applicable or could not be computed for a specific recor
   <td>The logging status of the flow log: OK — Data is logging normally to the chosen destinations. NODATA — There was no network traffic to or from the network interface during the aggregation interval. SKIPDATA — Some flow log records were skipped during the aggregation interval. This might be because of an internal capacity constraint, or an internal error. Parquet data type: STRING</td>
   <td>2</td>
 </tr>
-
-### Approach
-
-#### Let's consider the below log and breakdown what each field indicates:
-2 123456789012 eni-0a1b2c3d 10.0.1.201 198.51.100.2 443 49153 6 25 20000 1620140761 1620140821 ACCEPT OK 
-
-1. 2 - version
-2. 123456789012 - account id
-3. eni-0a1b2c3d - interface id
-4. 10.0.1.201 - srcaddr
-5. 198.51.100.2 - destaddr
-6. 443 - srcport
-7. 49153 - dstport
-8. 6 - protocol
-9. 25 - packets
-10. 20000 - bytes
-11. 1620140761 - start time (time when first packet was recieved) in unix
-12. 1620140821 - end time (time when last packet was recieved) in unix
-13. ACCEPT - action (Traffic was accepted)
-14. OK - logstatus (Data is logging normally to the chosen destinations.)
-
-
-#### The fields which we would be using for our analytics are 7.dstport, 8.protocol.
-
-1. To get the Count of matches for each tag,We use the above 2 fields from flow logs and use the lookup table to map both dstport and protocol as key (tuple) to get the tag and increment the tag count based on that.
-The protcol in flow logs has number code only, hence I have created a mapping of these protocol numbers below to map them to protocol given in look up table.
-
-{'6': 'tcp', '17': 'udp', '1': 'icmp'}
-
-The above protocol numbers were referred from -  https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
-
-
-2. To get the Count of matches for each port/protocol combination , we just create and add the count of each port protocol without using lookup table.
-
-Assumption: Here count of port doesn't say if its srcport or dstport. I have taken dstport as lookup table uses dstport.
-
-Edge Cases:
-
-1. The dstport, protocol combination in flow logs may not be found in the look up table. In that case, we can use untagged as tag as mentioned in example. 
-
-The outputs files are,
-Tag Counts - tag_counts.csv 
-Port/Protocol Counts - port_protocol_counts.csv.
 
 
 
