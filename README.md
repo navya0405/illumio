@@ -21,19 +21,19 @@ Ensure you have the following installed:
 
 1. **Clone the repository**
 
-Open a terminal and run the following git command:
+    Open a terminal and run the following git command:
 
-`git clone https://github.com/navya0405/illumio.git`
+    `git clone https://github.com/navya0405/illumio.git`
 
 2. **Navigate to the repository directory**
 
-Change to the cloned repository's directory:
+    Change to the cloned repository's directory:
 
 3. **Run the application**
 
-Execute the following command to start the application:
+    Execute the following command to start the application:
 
-`python3 main.py`
+    `python3 main.py`
 
 The outputs files are,
 Tag Counts - tag_counts.csv 
