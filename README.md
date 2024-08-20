@@ -11,7 +11,33 @@
 4. The tags can map to more than one port, protocol combinations.  for e.g. sv_P1 and sv_P2 in the sample above. 
 5. The matches should be case insensitive 
 
-## To run the code, clone the repo, enter the command `python3 main.py`
+### Prerequisites
+
+Ensure you have the following installed:
+- Git
+- Python 3
+
+### Installation
+
+1. **Clone the repository**
+
+Open a terminal and run the following git command:
+
+`git clone https://github.com/navya0405/illumio.git`
+
+2. **Navigate to the repository directory**
+
+Change to the cloned repository's directory:
+
+3. **Run the application**
+
+Execute the following command to start the application:
+
+`python3 main.py`
+
+The outputs files are,
+Tag Counts - tag_counts.csv 
+Port/Protocol Counts - port_protocol_counts.csv.
 
 ### Approach
 
