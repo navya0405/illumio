@@ -72,11 +72,38 @@ The above protocol numbers were referred from -  https://www.iana.org/assignment
 
 2. To get the Count of matches for each port/protocol combination , we just create and add the count of each port protocol without using lookup table.
 
-Assumption: Here count of port doesn't say if its srcport or dstport. I have taken dstport as lookup table uses dstport.
+### Assumptions: 
+1. Here count of port doesn't say if its srcport or dstport. I have taken dstport as lookup table uses dstport.
+2. The code only works for the given default log format, as it checks with predefined indices, if the length or location of the protocol or dstport changes (custom logs), the code won't work. The code would still work for different version logs but with the same default log format.
+3. If the length of the log is different than given default log, it will add a warning in logging and continue to next line and won't process the cusotm log line.
+4. Removed case sensitivity for protocol name alone, but kept the same case for tags from look up table to match the sample output.
 
-Edge Cases:
+### Edge Cases:
 
-1. The dstport, protocol combination in flow logs may not be found in the look up table. In that case, we can use untagged as tag as mentioned in example. 
+1. The dstport, protocol combination in flow logs may not be found in the look up table. In that case, we can use untagged as tag as mentioned in example.
+2. Changed the dstport for icmp protocol logs to 0 by default as ICMP logs don't have ports.
+3. If any protocol number is not known, Unknown protocol is assigned for simplicity as I have not added all protocols in the map and olny added the protocols given in the sample.
+
+### Testing:
+ 
+Tested the code with sample flow logs given and also added the below logs for testing edge cases.
+
+2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 880 17 9 4500 1620140661 1620140721 ACCEPT OK 
+2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 - 1 9 4500 1620140661 1620140721 ACCEPT OK
+2 123456789012 eni-4h5i6j7k 172.16.0.2 192.0.2.146 49154 98 16 9 4500 1620140661 1620140721 ACCEPT OK 
+ 
+It gave the below results for the above logs
+880,udp,1
+0,icmp,1
+98,unknown,1
+-,unknown,1
+
+Untagged,11
+sv_P2,1
+sv_P1,2
+email,3
+sv_P5,1
+
 
 The outputs files are,
 Tag Counts - tag_counts.csv 
